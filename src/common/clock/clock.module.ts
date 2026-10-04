@@ -1,0 +1,9 @@
+import { Module, Global } from '@nestjs/common';
+import { ClockService } from './clock.service.js';
+
+@Global()
+@Module({
+  providers: [ClockService],
+  exports: [ClockService],
+})
+export class ClockModule {}
