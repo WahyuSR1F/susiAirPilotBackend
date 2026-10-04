@@ -136,3 +136,11 @@ npm run test:cov
 | `CORS_ORIGIN` | `*` | Allowed origins (pisahkan dengan koma) |
 | `PILOT_USERNAME` | `johndoe` | Username pilot untuk login |
 | `PILOT_PASSWORD` | `susiairtest` | Password pilot untuk login |
+
+---
+
+## 👨‍💻 Developer
+
+Dikembangkan oleh **Wahyu Sahri Rhamadhan**
+
+🌐 https://www.wahyusahrirhamadhan.web.id/
