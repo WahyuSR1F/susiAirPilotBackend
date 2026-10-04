@@ -1,6 +1,9 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+const currentFilePath = fileURLToPath(import.meta.url);
 
 export interface PilotProfile {
   name: string;
@@ -64,7 +67,9 @@ export class DataStoreService implements OnModuleInit {
   }
 
   private findDataDirectory(): string {
+    const projectRoot = path.resolve(currentFilePath, '..', '..', '..', '..');
     const candidatePaths = [
+      path.join(projectRoot, 'data'),
       path.join(process.cwd(), 'data'),
       path.join(process.cwd(), 'susi_air_pilot_app', 'data'),
       path.join(process.cwd(), 'dist', 'data'),
