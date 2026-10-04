@@ -139,6 +139,24 @@ npm run test:cov
 
 ---
 
+## 🚀 Deploy ke Vercel
+
+Backend ini di-deploy sebagai **Vercel Serverless Function** (handler di `api/index.ts`), bukan sebagai server tradisional. Ikuti langkah berikut agar build tidak gagal dengan error `No entrypoint found which imports nestjs`.
+
+1. **Framework Preset harus `Other`** — JANGAN gunakan preset `Nest.js`.
+   - Dashboard Vercel → project → **Settings → Framework Preset → `Other`** (atau lewat CLI: `vercel project update susiAirPilotBackend --framework other`).
+   - Penyebab: detector `@vercel/nest` hanya mengenali pola CommonJS dan akan gagal pada project ESM (`"type": "module"`) seperti ini. Preset `Other` memaksa Vercel pakai builder Node.js generik (`@vercel/node`) yang menjalankan handler `api/index.ts`.
+2. **Build Command**: `npm run build` (sudah diatur di `vercel.json`).
+3. **Konfigurasi** (`vercel.json`):
+   - `functions.api/index.ts.includeFiles`: `"data/**"` — agar file mock JSON ikut terbundel ke dalam function.
+   - `rewrites`: semua path `/...` diteruskan ke `/api` agar endpoint (`/auth/login`, `/pilot/me`, `/docs`, dll.) tetap bisa diakses di root domain.
+4. **Redeploy** setelah mengubah preset: buka **Deployments → Redeploy** (push saja tidak selalu memicu rebuild saat preset lama masih aktif).
+5. **Verifikasi**: Build Logs baris atas harus menyebut `@vercel/node`, BUKAN `@vercel/nest`. Lalu tes `POST https://<domain>/auth/login` — harus balas token `200`.
+
+> Catatan: `src/main.ts` hanya untuk dev lokal (`npm run start:dev`). Di Vercel, request ditangani oleh `api/index.ts` melalui `app.getHttpAdapter().getInstance()`.
+
+---
+
 ## 👨‍💻 Developer
 
 Dikembangkan oleh **Wahyu Sahri Rhamadhan**
